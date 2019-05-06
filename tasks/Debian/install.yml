@@ -33,6 +33,7 @@
     dependencies:
       - libpam-pwdfile
       - python-passlib
+      - python3-passlib  # required in Ubuntu 18.04 and newer versions
 
 - name: Install easy-rsa package
   apt:
