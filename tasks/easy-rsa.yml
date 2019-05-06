@@ -41,3 +41,12 @@
   when:
     - ansible_distribution_release == 'stretch'
     - openvpn_use_system_easyrsa | bool
+
+- name: Fix openssl.cnf path on Ubuntu Bionic
+  file:
+    src: "{{ openvpn_etcdir + '/easy-rsa/openssl-1.0.0.cnf' }}"
+    dest: "{{ openvpn_etcdir + '/easy-rsa/openssl.cnf' }}"
+    state: link
+  when:
+    - ansible_distribution_release == 'bionic'
+    - not openvpn_use_system_easyrsa | bool
