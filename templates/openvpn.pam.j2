@@ -1,7 +1,11 @@
 # {{ ansible_managed }}
 
 {% if openvpn_use_pam_users and ansible_os_family == 'Debian' %}
-auth		required	pam_pwdfile.so pwdfile={{openvpn_etcdir}}/users
+# Use Google-authenticator module for OTP. Expected password: <secret><OTP>
+# google-authenticator will validate <OTP> and then forward <secret> to the next module
+auth		required	pam_google_authenticator.so secret=/etc/openvpn/google-authenticator/${USER} user={{ gauth_user }} forward_pass
+# Will check if <secret> is valid for ${USER}
+auth		required	pam_pwdfile.so pwdfile={{openvpn_etcdir}}/users use_first_pass
 account		required	pam_permit.so
 {% elif ansible_os_family == 'Debian' %}
 @include common-auth
